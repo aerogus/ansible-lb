@@ -1,0 +1,12 @@
+---
+
+- name: vim install
+  apt:
+    name: vim
+    state: present
+
+- name: vim copy conf
+  copy:
+    src: vimrc.local
+    dest: /etc/vim/vimrc.local
+    mode: 0644

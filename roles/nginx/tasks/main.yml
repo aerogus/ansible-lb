@@ -1,0 +1,51 @@
+---
+
+- name: check it
+  assert:
+    that:
+      - vhost_name is defined
+      - vhost_root is defined
+      - vhost_index is defined
+
+- name: nginx mkdir root
+  file:
+    path: /var/www/{{ inventory_hostname }}
+    state: directory
+    mode: 0755
+    owner: www-data
+    group: www-data
+
+- name: nginx copy www
+  copy:
+    src: index.php
+    dest: /var/www/{{ inventory_hostname }}/
+    mode: 0644
+    owner: www-data
+    group: www-data
+
+- name: nginx install
+  apt:
+    name: nginx
+    state: present
+
+- name: nginx copy vhost
+  template:
+    src: vhost.conf.j2
+    dest: /etc/nginx/sites-available/{{ inventory_hostname }}.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: reload nginx
+
+- name: nginx activate vhost
+  file:
+    src: /etc/nginx/sites-available/{{ inventory_hostname }}.conf
+    dest: /etc/nginx/sites-enabled/{{ inventory_hostname }}.conf
+    owner: root
+    group: root
+    state: link
+
+#- name: restart nginx
+#  service:
+#    name: nginx
+#    state: restarted

@@ -1,0 +1,20 @@
+---
+
+- name: haproxy install
+  apt:
+    name: haproxy
+    state: present
+
+- name: haproxy copy conf
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: 0644
+    owner: root
+    group: root
+  notify: reload haproxy
+
+- name: restart haproxy
+  service:
+    name: haproxy
+    state: restarted

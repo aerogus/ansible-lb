@@ -1,0 +1,17 @@
+" ecriture claire sur fond noir
+set background=dark
+
+" coloration syntaxique
+syntax on
+
+" convention 4 espaces pour indentation
+set expandtab
+set tabstop=4
+retab
+set shiftwidth=4
+
+" evite les tabulations lors des copier/coller
+set paste
+
+" affiche les numeros de ligne
+set nu

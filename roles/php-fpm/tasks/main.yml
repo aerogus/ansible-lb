@@ -1,0 +1,6 @@
+---
+
+- name: php-fpm install
+  apt:
+    name: php-fpm
+    state: present

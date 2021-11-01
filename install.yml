@@ -1,0 +1,17 @@
+---
+
+- name: installation commune
+  hosts: all
+  roles:
+    - common
+
+- name: installation nginx sur les webs
+  hosts: web
+  roles:
+    - nginx
+    - php-fpm
+
+- name: installation haproxy sur les lbs
+  hosts: lb
+  roles:
+    - haproxy

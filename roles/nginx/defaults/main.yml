@@ -1,0 +1,8 @@
+vhost_name: "{{ inventory_hostname }}"
+vhost_alt_names: "1.dev.aerogus.net"
+
+vhost_root: "/var/www/{{ inventory_hostname }}"
+vhost_index: index.php
+
+vhost_fastcgi_params: {}
+vhost_fastcgi_pass: unix:/var/run/php/php7.3-fpm.sock

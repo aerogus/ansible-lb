@@ -1,0 +1,4 @@
+---
+
+common_var: "coucou"
+hostname: "{{ inventory_hostname }}"

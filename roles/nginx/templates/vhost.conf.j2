@@ -1,0 +1,23 @@
+server {
+    listen *:80;
+    server_name     {{ vhost_name }} {{ vhost_alt_names }};
+    root            {{ vhost_root }};
+    index           {{ vhost_index }};
+    access_log      /var/log/nginx/{{ vhost_name }}-access.log;
+    error_log       /var/log/nginx/{{ vhost_name }}-error.log;
+
+    location / {
+        try_files $uri $uri/ {{ vhost_index }};
+    }
+
+    # PHP Handling
+    location ~* \.php$ {
+        include /etc/nginx/fastcgi_params;
+        fastcgi_pass  {{ vhost_fastcgi_pass }};
+        fastcgi_index {{ vhost_index }};
+        fastcgi_param SCRIPT_FILENAME $realpath_root/$fastcgi_script_name;
+        {% for param, value in vhost_fastcgi_params.items()-%}
+        fastcgi_param {{ param }} {{ value }};
+        {% endfor %}
+    }
+}

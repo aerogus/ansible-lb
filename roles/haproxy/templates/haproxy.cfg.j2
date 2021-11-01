@@ -1,0 +1,45 @@
+global
+  maxconn 5000
+  log /dev/log local0
+  log localhost local1 notice
+  user haproxy
+  group haproxy
+  daemon
+
+defaults
+  log global
+  mode http
+  option httplog
+  option dontlognull
+  retries 3
+  timeout connect 5000
+  timeout client 50000
+  timeout server 50000
+
+frontend 1.dev.aerogus.net
+  bind *:80
+  default_backend web_servers
+
+backend web_servers
+  # répartition par tourniquet
+  balance roundrobin
+  # on set au client un cookie pour qu'il revienne sur le même backend
+  # à commenter si on veut un équilibrage à chaque requête
+  #cookie SERVERUSED insert indirect nocache
+  # Enable HTTP protocol to check on the servers health
+  option httpchk HEAD /
+  # Enable insertion of the X-Forwarded-For header to requests sent to servers
+  option forwardfor
+  # Enable HTTP connection closing on the server side
+  option http-server-close
+  default-server check maxconn 20
+  # lister les nodes nginx ici
+  server web2 2.dev.aerogus.net:80 cookie web2
+  server web3 3.dev.aerogus.net:80 cookie web3
+
+listen stats
+    bind *:8080
+    stats enable
+    stats uri /monitor
+    stats auth admin:admin
+    stats refresh 5s

@@ -1,0 +1,6 @@
+---
+
+- name: MariaDB install
+  apt:
+    name: mariadb-server
+    state: present

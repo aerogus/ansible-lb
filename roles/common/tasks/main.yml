@@ -1,0 +1,19 @@
+---
+
+- name: Installation des paquets communs
+  apt:
+    name:
+      - git
+      - htop
+    state: present
+
+- name: Paramétrage du nom d'hôte
+  hostname: name={{ hostname }}
+
+- name: Installation + configuration de vim
+  include_role:
+    name: vim
+
+- name: Sécurisation sshd
+  include_role:
+    name: sshd
